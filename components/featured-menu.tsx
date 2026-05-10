@@ -1,5 +1,6 @@
 "use client"
 
+import { useState, useEffect } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { motion } from "framer-motion"
@@ -8,63 +9,61 @@ import { Button } from "@/components/ui/button"
 import { useCartStore } from "@/lib/store/cart"
 import { toast } from "sonner"
 
-// ─── Verified Unsplash photo IDs ─────────────────────────────────────────────
-const FEATURED = [
-  {
-    id: "f-sk8",
-    name: "Combo Skillet",
-    price: 11.99,
-    description: "Bacon, sausage, ham, green peppers, onions, mushrooms, tomatoes, cheddar — with hash browns, toast & two eggs",
-    image: "https://images.unsplash.com/photo-1504754524776-8f4f37790ca0",
-    popular: true,
-  },
-  {
-    id: "f-bs1",
-    name: "Eggs Benedict",
-    price: 10.99,
-    description: "Two poached eggs smothered in hollandaise sauce on an English muffin with Canadian bacon",
-    image: "https://images.unsplash.com/photo-1482049016688-2d3e1b311543",
-    popular: true,
-  },
-  {
-    id: "f-ft4",
-    name: "Strawberry Cheesecake French Toast",
-    price: 9.99,
-    description: "Our famous strawberry cheesecake French toast — a true crowd favorite",
-    image: "https://images.unsplash.com/photo-1541781774459-bb2af2f05b55",
-    popular: true,
-  },
-  {
-    id: "f-b3",
-    name: "Bacon Cheeseburger",
-    price: 12.09,
-    description: "1/3 lb. freshly ground beef with thick cheese and crispy bacon. Served with fries and homemade soup",
-    image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd",
-    popular: true,
-  },
-  {
-    id: "f-pw5",
-    name: "Tropical Pancakes",
-    price: 9.99,
-    description: "Fluffy pancakes with banana, kiwi, and strawberry with raspberry sauce",
-    image: "https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445",
-    popular: true,
-  },
-  {
-    id: "f-sl12",
-    name: "Gyros Plate",
-    price: 14.49,
-    description: "Tender gyros on pita with onion, tomato, cucumber sauce. Served with a small Grecian salad and choice of potato",
-    image: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd",
-    popular: true,
-  },
+type Product = {
+  id: string; name: string; price: number
+  description: string | null; image_url: string | null
+  is_popular: boolean; is_available: boolean
+  categories?: { slug: string } | null
+}
+
+const CAT_IMG: Record<string, string> = {
+  "omelettes":           "https://images.unsplash.com/photo-1482049016688-2d3e1b311543",
+  "eggs-more":           "https://images.unsplash.com/photo-1504754524776-8f4f37790ca0",
+  "skillets":            "https://images.unsplash.com/photo-1414235077428-338989a2e8c0",
+  "pancakes-waffles":    "https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445",
+  "french-toast-crepes": "https://images.unsplash.com/photo-1541781774459-bb2af2f05b55",
+  "breakfast-specials":  "https://images.unsplash.com/photo-1533089860892-a7c6f0a88666",
+  "salads-plates":       "https://images.unsplash.com/photo-1512621776951-a57141f2eefd",
+  "burgers":             "https://images.unsplash.com/photo-1568901346375-23c9450c58cd",
+  "sandwiches-wraps":    "https://images.unsplash.com/photo-1553909489-cd47e0907980",
+  "sides-soups":         "https://images.unsplash.com/photo-1547592180-85f173990554",
+  "desserts":            "https://images.unsplash.com/photo-1551024506-0bccd828d307",
+  "beverages":           "https://images.unsplash.com/photo-1509042239860-f550ce710b93",
+  "kids":                "https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445",
+}
+
+const FALLBACK: Product[] = [
+  { id: "f-sk8",  name: "Combo Skillet",                    price: 11.99, description: "Bacon, sausage, ham, green peppers, onions, mushrooms, tomatoes, cheddar — with hash browns, toast & two eggs",    image_url: CAT_IMG["skillets"],           is_popular: true, is_available: true },
+  { id: "f-bs1",  name: "Eggs Benedict",                    price: 10.99, description: "Two poached eggs smothered in hollandaise sauce on an English muffin with Canadian bacon",                           image_url: CAT_IMG["eggs-more"],          is_popular: true, is_available: true },
+  { id: "f-ft4",  name: "Strawberry Cheesecake French Toast",price: 9.99,  description: "Our famous strawberry cheesecake French toast — a true crowd favorite",                                              image_url: CAT_IMG["french-toast-crepes"],is_popular: true, is_available: true },
+  { id: "f-b3",   name: "Bacon Cheeseburger",               price: 12.09, description: "1/3 lb. freshly ground beef with thick cheese and crispy bacon. Served with fries and homemade soup",                image_url: CAT_IMG["burgers"],            is_popular: true, is_available: true },
+  { id: "f-pw5",  name: "Tropical Pancakes",                price: 9.99,  description: "Fluffy pancakes with banana, kiwi, and strawberry with raspberry sauce",                                              image_url: CAT_IMG["pancakes-waffles"],   is_popular: true, is_available: true },
+  { id: "f-sl12", name: "Gyros Plate",                      price: 14.49, description: "Tender gyros on pita with onion, tomato, cucumber sauce. Served with a small Grecian salad and choice of potato",   image_url: CAT_IMG["salads-plates"],      is_popular: true, is_available: true },
 ]
 
-export function FeaturedMenu() {
-  const addItem = useCartStore((s) => s.addItem)
+function getImage(product: Product): string {
+  if (product.image_url) return product.image_url
+  const slug = product.categories?.slug
+  return slug ? (CAT_IMG[slug] ?? CAT_IMG["skillets"]) : CAT_IMG["skillets"]
+}
 
-  const handleAdd = (item: typeof FEATURED[0]) => {
-    addItem({ id: item.id, name: item.name, price: item.price, image_url: item.image })
+export function FeaturedMenu() {
+  const [products, setProducts] = useState<Product[]>(FALLBACK)
+  const addItem = useCartStore(s => s.addItem)
+
+  useEffect(() => {
+    fetch('/api/products')
+      .then(r => r.json())
+      .then(({ products: prods }) => {
+        if (!prods?.length) return
+        const popular = (prods as Product[]).filter(p => p.is_popular && p.is_available)
+        if (popular.length >= 3) setProducts(popular.slice(0, 6))
+      })
+      .catch(() => {})
+  }, [])
+
+  const handleAdd = (item: Product) => {
+    addItem({ id: item.id, name: item.name, price: item.price, image_url: item.image_url })
     toast.success(`Added ${item.name} to cart`, {
       description: `$${item.price.toFixed(2)}`,
       action: { label: "View Cart", onClick: () => (window.location.href = "/cart") },
@@ -91,7 +90,7 @@ export function FeaturedMenu() {
         </motion.div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-10">
-          {FEATURED.map((item, i) => (
+          {products.map((item, i) => (
             <motion.div
               key={item.id}
               initial={{ opacity: 0, y: 24 }}
@@ -102,7 +101,7 @@ export function FeaturedMenu() {
             >
               <div className="relative h-44 overflow-hidden">
                 <Image
-                  src={item.image}
+                  src={getImage(item)}
                   alt={item.name}
                   fill
                   className="object-cover group-hover:scale-105 transition-transform duration-500"
@@ -114,7 +113,6 @@ export function FeaturedMenu() {
                   Popular
                 </div>
               </div>
-
               <div className="p-5">
                 <h3 className="font-semibold text-lg text-foreground group-hover:text-primary transition-colors mb-1.5 leading-tight">
                   {item.name}
