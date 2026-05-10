@@ -14,21 +14,19 @@ import { toast } from "sonner"
 import type { Product, Category } from "@/types"
 import { cn } from "@/lib/utils"
 
-// ─── Category cards ───────────────────────────────────────────────────────────
 const CATEGORY_CARDS = [
-  { id: "breakfast",             slugs: ["omelettes","eggs-more","breakfast-specials"], label: "Breakfast",                  sub: "Omelettes, eggs, specials & burritos",                      emoji: "🍳", image: "https://images.unsplash.com/photo-1482049016688-2d3e1b311543", gradient: "from-amber-900/70" },
-  { id: "pancakes-waffles-crepes",slugs: ["pancakes-waffles","french-toast-crepes"],   label: "Pancakes, Waffles & Crepes", sub: "Buttermilk pancakes, Belgian waffles, French toast & crepes", emoji: "🧇", image: "https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445", gradient: "from-orange-900/70" },
-  { id: "skillets",              slugs: ["skillets"],                                   label: "Skillets",                   sub: "13 skillet varieties — all $11.99",                         emoji: "🥘", image: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0", gradient: "from-red-900/70" },
-  { id: "salads-plates",         slugs: ["salads-plates"],                              label: "Salads & Plates",            sub: "Fresh salads, plates & the famous Gyros Plate",             emoji: "🥗", image: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd", gradient: "from-green-900/70" },
-  { id: "burgers",               slugs: ["burgers"],                                    label: "Burgers",                    sub: "1/3 lb. fresh-ground beef burgers & melts",                 emoji: "🍔", image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd", gradient: "from-yellow-900/70" },
-  { id: "sandwiches-wraps",      slugs: ["sandwiches-wraps"],                           label: "Sandwiches & Wraps",         sub: "Clubs, chicken sandwiches, wraps, subs & croissants",       emoji: "🥪", image: "https://images.unsplash.com/photo-1553909489-cd47e0907980", gradient: "from-stone-900/70" },
-  { id: "sides-soups",           slugs: ["sides-soups"],                                label: "Soups, Sides & Appetizers",  sub: "Homemade soup, cheese curds, hash browns & more",          emoji: "🍲", image: "https://images.unsplash.com/photo-1547592180-85f173990554", gradient: "from-blue-900/70" },
-  { id: "desserts",              slugs: ["desserts"],                                    label: "Desserts",                   sub: "Cheesecake, pies & assorted cakes",                         emoji: "🍰", image: "https://images.unsplash.com/photo-1551024506-0bccd828d307", gradient: "from-pink-900/70" },
-  { id: "beverages",             slugs: ["beverages"],                                   label: "Beverages",                  sub: "Coffee, juice, shakes, lemonade & more",                    emoji: "☕", image: "https://images.unsplash.com/photo-1509042239860-f550ce710b93", gradient: "from-stone-900/70" },
-  { id: "kids",                  slugs: ["kids"],                                        label: "Kids Menu",                  sub: "For children 12 & under — served with a drink",             emoji: "🧒", image: "https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445", gradient: "from-purple-900/70" },
+  { id: "breakfast",              slugs: ["omelettes","eggs-more","breakfast-specials"], label: "Breakfast",                  sub: "Omelettes, eggs, specials & burritos",                       emoji: "🍳", image: "https://images.unsplash.com/photo-1482049016688-2d3e1b311543", gradient: "from-amber-900/70"  },
+  { id: "pancakes-waffles-crepes",slugs: ["pancakes-waffles","french-toast-crepes"],    label: "Pancakes, Waffles & Crepes", sub: "Buttermilk pancakes, Belgian waffles, French toast & crepes", emoji: "🧇", image: "https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445", gradient: "from-orange-900/70" },
+  { id: "skillets",               slugs: ["skillets"],                                   label: "Skillets",                   sub: "13 skillet varieties — all $11.99",                          emoji: "🥘", image: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0", gradient: "from-red-900/70"    },
+  { id: "salads-plates",          slugs: ["salads-plates"],                              label: "Salads & Plates",            sub: "Fresh salads, plates & the famous Gyros Plate",              emoji: "🥗", image: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd", gradient: "from-green-900/70"  },
+  { id: "burgers",                slugs: ["burgers"],                                    label: "Burgers",                    sub: "1/3 lb. fresh-ground beef burgers & melts",                  emoji: "🍔", image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd", gradient: "from-yellow-900/70" },
+  { id: "sandwiches-wraps",       slugs: ["sandwiches-wraps"],                           label: "Sandwiches & Wraps",         sub: "Clubs, chicken sandwiches, wraps, subs & croissants",        emoji: "🥪", image: "https://images.unsplash.com/photo-1553909489-cd47e0907980", gradient: "from-stone-900/70"  },
+  { id: "sides-soups",            slugs: ["sides-soups"],                                label: "Soups, Sides & Appetizers",  sub: "Homemade soup, cheese curds, hash browns & more",           emoji: "🍲", image: "https://images.unsplash.com/photo-1547592180-85f173990554", gradient: "from-blue-900/70"   },
+  { id: "desserts",               slugs: ["desserts"],                                    label: "Desserts",                   sub: "Cheesecake, pies & assorted cakes",                          emoji: "🍰", image: "https://images.unsplash.com/photo-1551024506-0bccd828d307", gradient: "from-pink-900/70"   },
+  { id: "beverages",              slugs: ["beverages"],                                   label: "Beverages",                  sub: "Coffee, juice, shakes, lemonade & more",                     emoji: "☕", image: "https://images.unsplash.com/photo-1509042239860-f550ce710b93", gradient: "from-stone-900/70"  },
+  { id: "kids",                   slugs: ["kids"],                                        label: "Kids Menu",                  sub: "For children 12 & under — served with a drink",              emoji: "🧒", image: "https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445", gradient: "from-purple-900/70" },
 ]
 
-// ─── Static categories (slugs used as IDs for the fallback data) ─────────────
 const STATIC_CATEGORIES: Category[] = [
   { id: "omelettes",           name: "Omelettes",             slug: "omelettes",           icon: "🍳", description: null, display_order: 1,  created_at: "" },
   { id: "eggs-more",           name: "Eggs & More",           slug: "eggs-more",           icon: "🥚", description: null, display_order: 2,  created_at: "" },
@@ -45,20 +43,15 @@ const STATIC_CATEGORIES: Category[] = [
   { id: "kids",                name: "Kids Menu",             slug: "kids",                icon: "🧒", description: null, display_order: 13, created_at: "" },
 ]
 
-// ─── Slug resolver — works for both static (slug as ID) and Supabase products
-//     Supabase products have `categories: { slug }` joined; static use slug as category_id
 type ProductWithCat = Product & { categories?: { slug: string } | null }
 
 function getProductSlug(prod: ProductWithCat): string {
-  // 1. Supabase joined data
   if (prod.categories?.slug) return prod.categories.slug
-  // 2. Static data: category_id IS the slug
   const match = STATIC_CATEGORIES.find(c => c.id === prod.category_id || c.slug === prod.category_id)
   if (match) return match.slug
   return prod.category_id ?? ""
 }
 
-// ─── Static product helper ────────────────────────────────────────────────────
 const p = (id: string, cat: string, name: string, desc: string, price: number, popular = false, ord = 0): Product => ({
   id, category_id: cat, name, description: desc, price, is_popular: popular,
   is_available: true, image_url: null, allergens: [], calories: null, display_order: ord, created_at: "", updated_at: "",
@@ -228,13 +221,11 @@ const STATIC_PRODUCTS: Product[] = [
   p("k9","kids","Kids Chicken Strips & Fries","Chicken strips with French fries. Served with a kid's drink",7.99,false,9),
 ]
 
-// ─── Category image fallback ──────────────────────────────────────────────────
 function getCatImage(slug: string) {
   const card = CATEGORY_CARDS.find(c => c.slugs.includes(slug))
   return card?.image ?? "https://images.unsplash.com/photo-1414235077428-338989a2e8c0"
 }
 
-// ─── Page component ───────────────────────────────────────────────────────────
 export default function MenuPage() {
   const [activeCard, setActiveCard] = useState<typeof CATEGORY_CARDS[0] | null>(null)
   const [products, setProducts]     = useState<ProductWithCat[]>(STATIC_PRODUCTS)
@@ -245,26 +236,24 @@ export default function MenuPage() {
   const totalItems = useCartStore(s => s.totalItems())
   const totalPrice = useCartStore(s => s.totalPrice())
 
-  // Load real products from Supabase (includes joined `categories` object)
   useEffect(() => {
     fetch("/api/products")
       .then(r => r.json())
       .then(({ products: prods }) => {
         if (prods?.length > 10) setProducts(prods.filter((x: ProductWithCat) => x.is_available))
       })
-      .catch(() => {/* keep static fallback */})
+      .catch(() => {})
   }, [])
 
-  // Filter using getProductSlug — handles both static (slug as ID) and Supabase (UUID + categories.slug)
   const visibleProducts = useMemo(() => {
     if (!activeCard) return []
     return products.filter(prod => {
-      const slug       = getProductSlug(prod)
-      const inCard     = activeCard.slugs.includes(slug)
+      const slug        = getProductSlug(prod)
+      const inCard      = activeCard.slugs.includes(slug)
       const matchSearch = !search
         || prod.name.toLowerCase().includes(search.toLowerCase())
         || prod.description?.toLowerCase().includes(search.toLowerCase())
-      const matchPop   = !showPopularOnly || prod.is_popular
+      const matchPop    = !showPopularOnly || prod.is_popular
       return inCard && matchSearch && matchPop
     })
   }, [products, activeCard, search, showPopularOnly])
@@ -294,46 +283,37 @@ export default function MenuPage() {
       <div className="container mx-auto px-4 pb-32 mt-8">
         <AnimatePresence mode="wait">
 
-          {/* ── Category card grid ──────────────────────────────────────── */}
+          {/* ── Category cards ──────────────────────────────────────────── */}
           {!activeCard && (
             <motion.div key="categories" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
               <p className="text-center text-muted-foreground mb-8 text-sm">
                 Choose a category to browse the full selection
               </p>
               <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                {CATEGORY_CARDS.map((card, i) => {
-                  // Count uses the same slug resolver so Supabase products are counted correctly
-                  const count = products.filter(prod => card.slugs.includes(getProductSlug(prod))).length
-                  return (
-                    <motion.button
-                      key={card.id}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.35, delay: i * 0.05 }}
-                      onClick={() => setActiveCard(card)}
-                      className="group relative h-44 rounded-2xl overflow-hidden text-left shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
-                    >
-                      <Image src={card.image} alt={card.label} fill className="object-cover group-hover:scale-105 transition-transform duration-500" unoptimized />
-                      <div className={`absolute inset-0 bg-gradient-to-t ${card.gradient} to-transparent`} />
-                      <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors" />
-                      <div className="absolute bottom-0 left-0 right-0 p-4">
-                        <div className="flex items-end justify-between">
-                          <div>
-                            <p className="text-2xl mb-1">{card.emoji}</p>
-                            <h3 className="text-white font-bold text-base leading-tight">{card.label}</h3>
-                            <p className="text-white/70 text-xs mt-0.5 line-clamp-1">{card.sub}</p>
-                          </div>
-                          <div className="flex flex-col items-end gap-1">
-                            <span className="bg-white/20 backdrop-blur text-white text-xs font-semibold px-2 py-0.5 rounded-full">
-                              {count} items
-                            </span>
-                            <ChevronRight className="h-4 w-4 text-white/80 group-hover:translate-x-0.5 transition-transform" />
-                          </div>
+                {CATEGORY_CARDS.map((card, i) => (
+                  <motion.button
+                    key={card.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.35, delay: i * 0.05 }}
+                    onClick={() => setActiveCard(card)}
+                    className="group relative h-44 rounded-2xl overflow-hidden text-left shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+                  >
+                    <Image src={card.image} alt={card.label} fill className="object-cover group-hover:scale-105 transition-transform duration-500" unoptimized />
+                    <div className={`absolute inset-0 bg-gradient-to-t ${card.gradient} to-transparent`} />
+                    <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors" />
+                    <div className="absolute bottom-0 left-0 right-0 p-4">
+                      <div className="flex items-end justify-between">
+                        <div>
+                          <p className="text-2xl mb-1">{card.emoji}</p>
+                          <h3 className="text-white font-bold text-base leading-tight">{card.label}</h3>
+                          <p className="text-white/70 text-xs mt-0.5 line-clamp-1">{card.sub}</p>
                         </div>
+                        <ChevronRight className="h-4 w-4 text-white/60 group-hover:translate-x-0.5 transition-transform flex-shrink-0" />
                       </div>
-                    </motion.button>
-                  )
-                })}
+                    </div>
+                  </motion.button>
+                ))}
               </div>
             </motion.div>
           )}
@@ -341,7 +321,6 @@ export default function MenuPage() {
           {/* ── Products list ───────────────────────────────────────────── */}
           {activeCard && (
             <motion.div key="products" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.25 }}>
-              {/* Back + title */}
               <div className="flex items-center gap-4 mb-6">
                 <button
                   onClick={() => { setActiveCard(null); setSearch(""); setShowPopularOnly(false) }}
@@ -355,7 +334,6 @@ export default function MenuPage() {
                 <h2 className="text-xl font-serif font-bold text-foreground">{activeCard.label}</h2>
               </div>
 
-              {/* Search + popular */}
               <div className="flex flex-col sm:flex-row gap-3 mb-6">
                 <div className="relative flex-1">
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -392,10 +370,7 @@ export default function MenuPage() {
                         className="group bg-card rounded-2xl border border-border/60 overflow-hidden hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200"
                       >
                         <div className="relative h-28 overflow-hidden bg-secondary">
-                          <Image
-                            src={product.image_url || getCatImage(slug)}
-                            alt={product.name} fill className="object-cover group-hover:scale-105 transition-transform duration-500" unoptimized
-                          />
+                          <Image src={product.image_url || getCatImage(slug)} alt={product.name} fill className="object-cover group-hover:scale-105 transition-transform duration-500" unoptimized />
                           <div className="absolute inset-0 bg-gradient-to-t from-black/25 to-transparent" />
                           {product.is_popular && (
                             <span className="absolute top-2 left-2 flex items-center gap-1 bg-accent text-accent-foreground text-[11px] font-semibold px-2 py-0.5 rounded-full shadow">
