@@ -5,33 +5,35 @@ import { motion } from "framer-motion"
 import { Heart, Clock, Award, Users } from "lucide-react"
 
 const VALUES = [
-  { icon: Heart, title: "Made with Love",  description: "Every dish is crafted from scratch each morning using fresh, quality ingredients our family has chosen for decades." },
-  { icon: Clock, title: "Open 6 Days",     description: "We open at 6AM every day except Thursday — because great food shouldn't have too long a curfew." },
-  { icon: Award, title: "Quality First",   description: "From fresh-squeezed OJ to hand-pressed burgers, we never cut corners on quality." },
-  { icon: Users, title: "Family Owned",    description: "A true family business where every team member feels like family and every guest feels at home." },
+  { icon: Heart, title: "Made with Love", description: "Every dish is crafted from scratch each morning using fresh, quality ingredients our family has chosen for decades." },
+  { icon: Clock, title: "Open 6 Days",    description: "We open at 6AM every day except Thursday — because great food shouldn't have too long a curfew." },
+  { icon: Award, title: "Quality First",  description: "From fresh-squeezed OJ to hand-pressed burgers, we never cut corners on quality." },
+  { icon: Users, title: "Family Owned",   description: "A true family business where every team member feels like family and every guest feels at home." },
 ]
 
 const STATS = [
   { value: "809+", label: "Happy Reviews" },
   { value: "4.5★", label: "Average Rating" },
   { value: "6AM",  label: "We Open Daily" },
-  { value: "100+", label: "Menu Items"     },
+  { value: "100+", label: "Menu Items"    },
 ]
 
 const GALLERY = [
-  { src: "https://images.unsplash.com/photo-1482049016688-2d3e1b311543", alt: "Fresh Eggs"  },
-  { src: "https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445", alt: "Pancakes"    },
-  { src: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd", alt: "Burgers"     },
-  { src: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd", alt: "Salads"      },
+  { src: "https://images.unsplash.com/photo-1482049016688-2d3e1b311543", alt: "Fresh Eggs" },
+  { src: "https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445", alt: "Pancakes"   },
+  { src: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd", alt: "Burgers"    },
+  { src: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd", alt: "Salads"     },
 ]
 
 export function AboutSection() {
   return (
     <section id="about" className="py-20 md:py-28 bg-background">
       <div className="container mx-auto px-4">
-        <div className="grid lg:grid-cols-2 gap-16 items-start">
+        {/* items-center aligns both columns to the vertical midpoint so
+            neither the photos nor the text float too high on wide screens */}
+        <div className="grid lg:grid-cols-2 gap-16 items-center">
 
-          {/* Left */}
+          {/* ── Left: text + stats + value cards ─────────────────────── */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -42,6 +44,7 @@ export function AboutSection() {
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif font-bold text-foreground mt-3 mb-6 leading-tight">
               A Little Cafe with a Big Heart
             </h2>
+
             <div className="space-y-4 text-muted-foreground leading-relaxed">
               <p>
                 Nestled in the heart of Sheboygan, Cafe Bella has been waking up the neighborhood
@@ -59,6 +62,7 @@ export function AboutSection() {
               </p>
             </div>
 
+            {/* Stats */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-10">
               {STATS.map((s) => (
                 <div key={s.label} className="text-center p-4 bg-secondary/50 rounded-2xl">
@@ -68,6 +72,7 @@ export function AboutSection() {
               ))}
             </div>
 
+            {/* Value cards */}
             <div className="grid sm:grid-cols-2 gap-4 mt-8">
               {VALUES.map((item) => {
                 const Icon = item.icon
@@ -90,7 +95,7 @@ export function AboutSection() {
             </div>
           </motion.div>
 
-          {/* Right */}
+          {/* ── Right: photo collage ──────────────────────────────────── */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -98,6 +103,7 @@ export function AboutSection() {
             transition={{ duration: 0.7 }}
             className="space-y-4"
           >
+            {/* Hero photo */}
             <div className="relative h-72 rounded-2xl overflow-hidden shadow-xl">
               <Image
                 src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0"
@@ -111,6 +117,7 @@ export function AboutSection() {
               </div>
             </div>
 
+            {/* 2×2 gallery */}
             <div className="grid grid-cols-2 gap-3">
               {GALLERY.map((img, i) => (
                 <motion.div
@@ -130,9 +137,10 @@ export function AboutSection() {
               ))}
             </div>
 
+            {/* CTA strip */}
             <div className="bg-primary text-primary-foreground rounded-2xl p-5 flex items-center justify-between">
               <div>
-                <p className="font-semibold">Mon–Wed & Fri–Sun</p>
+                <p className="font-semibold">Mon–Wed &amp; Fri–Sun</p>
                 <p className="text-primary-foreground/70 text-sm">Closed Thursdays · 725 Indiana Ave</p>
               </div>
               <a
@@ -143,6 +151,7 @@ export function AboutSection() {
               </a>
             </div>
           </motion.div>
+
         </div>
       </div>
     </section>

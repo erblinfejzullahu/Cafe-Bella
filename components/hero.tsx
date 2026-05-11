@@ -40,7 +40,7 @@ export function Hero() {
             className="text-base md:text-lg text-white/70 mb-8 max-w-md leading-relaxed"
           >
             Sheboygan's favorite breakfast &amp; lunch spot. Scratch-made omelettes,
-            sizzling skillets, juicy burgers — served with a smile every day except Thursday.
+            sizzling skillets, juicy burgers — served with a smile.
           </motion.p>
 
           <motion.div
